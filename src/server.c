@@ -16,9 +16,17 @@ int main() {
     int clientSocketFD = accept(serverSocketFD, &clientAddress, &clientAddressSize);
 
     char buffer[4096];
-    recv(clientSocketFD, &buffer, sizeof(buffer), 0);
+    while (1) {
+        ssize_t amountReceived = recv(clientSocketFD, &buffer, sizeof(buffer), 0);
 
-    printf("Response: %s\n", buffer);
+        if (amountReceived > 0) {
+            buffer[amountReceived] = 0;
+            printf("Response: %s\n", buffer);
+        } else {
+            break;
+        }
+    }
 
-    close(serverSocketFD);
+    close(clientSocketFD);
+    shutdown(serverSocketFD, SHUT_RDWR);
 }

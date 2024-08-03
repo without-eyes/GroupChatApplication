@@ -9,13 +9,21 @@ int main() {
         puts("Connection was successful!\n");
     }
 
-    char* message = "GET \\ HTTP/1.1\r\nHost:google.com\r\n\r\n";
-    send(socketFD, message, strlen(message), 0);
+    char* line = NULL;
+    size_t lineSize = 0;
+    printf("Type and we will send(type exit)...\n");
 
-    char buffer[4096];
-    recv(socketFD, &buffer, sizeof(buffer), 0);
+    while (1) {
+        ssize_t charCount = getline(&line, &lineSize, stdin);
 
-    printf("Response: %s\n", buffer);
+        if (charCount > 0) {
+            if (strcmp(line, "exit\n") == 0) {
+                break;
+            }
+
+            send(socketFD, line, charCount, 0);
+        }
+    }
 
     close(socketFD);
 }
