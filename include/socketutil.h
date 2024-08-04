@@ -8,6 +8,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <malloc.h>
+#include <stdbool.h>
+#include <pthread.h>
 
 int createTCPIpv4Socket();
 
